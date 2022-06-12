@@ -19,10 +19,8 @@ object Persons : IntIdTable() {
     val citizen = varchar("citizen", 100)
     val admissionForm = integer("admissionForm")
 }
-
 class Person(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Person>(Persons)
-
     var name by Persons.name
     var obj by Persons.obj
     var jobPosition by Persons.jobPosition
