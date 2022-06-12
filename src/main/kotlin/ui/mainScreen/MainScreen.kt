@@ -1,4 +1,4 @@
-package ui
+package ui.mainScreen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(
-    //todo viewModel: MainViewModel,
+    viewModel: AppViewModel,
 ) {
     var saved by remember { mutableStateOf(false) }
 
