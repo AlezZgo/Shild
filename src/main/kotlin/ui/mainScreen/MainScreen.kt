@@ -92,39 +92,44 @@ fun MainScreen(
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(4)
                         ) {
-                            itemsIndexed(viewModel.filters.value) { index,filter ->
-                                var field by remember { mutableStateOf(filter.value) }
-                                OutlinedTextField(value = field,
-                                    modifier = Modifier.padding(4.dp),
-                                    singleLine = true,
-                                    onValueChange = { newValue ->
-
-                                        if (newValue.length > 100) return@OutlinedTextField
-                                        val block = {
-                                            field = newValue
-                                            viewModel.filters.value.removeAt(index)
-                                            if (newValue.isNotEmpty()) {
-                                                filter.value = newValue
-                                                viewModel.filters.value.add(index,filter)
-                                            }
-                                        }
-                                        when (filter.column.columnType) {
-                                            is IntegerColumnType, is FloatColumnType -> {
-                                                if (newValue.all { it.isDigit() }) {
-                                                    block.invoke()
+                            items(currentTable.value.filters()) { filter ->
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.padding(4.dp)
+                                ) {
+                                    var field by remember { mutableStateOf("") }
+                                    OutlinedTextField(value = field,
+                                        singleLine = true,
+                                        onValueChange = { newValue ->
+                                            if (newValue.length > 100) return@OutlinedTextField
+                                            val block = {
+                                                field = newValue
+                                                viewModel.filters.value.removeIf {
+                                                    it == filter
+                                                }
+                                                if (newValue.isNotEmpty()) {
+                                                    viewModel.filters.value.add(filter)
                                                 }
                                             }
-                                            is StringColumnType -> {
-                                                block.invoke()
+                                            when (filter.column.columnType) {
+                                                is IntegerColumnType, is FloatColumnType -> {
+                                                    if (newValue.all { it.isDigit() }) {
+                                                        block.invoke()
+                                                    }
+                                                }
+                                                is StringColumnType -> {
+                                                    block.invoke()
+                                                }
+                                                else -> throw RuntimeException("Unknown")
                                             }
-                                            else -> throw RuntimeException("Unknown")
-                                        }
-                                    },
-                                    label = { Text(filter.column.name.toRussian()) }
-                                )
-                            }
+                                        },
+                                        label = { Text(filter.column.name.toRussian()) })
+                                }
 
+
+                            }
                         }
+
                     }
                 }
                 Box(
