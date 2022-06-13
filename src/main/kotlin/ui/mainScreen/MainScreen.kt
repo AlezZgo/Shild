@@ -12,6 +12,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import db.toRussian
+import org.jetbrains.exposed.sql.FloatColumnType
+import org.jetbrains.exposed.sql.IntegerColumnType
+import org.jetbrains.exposed.sql.StringColumnType
 import ui.TablesSpinner
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
@@ -89,12 +92,36 @@ fun MainScreen(
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(4)
                         ) {
-                            items(currentTable.value.filters()) { filter ->
+                            itemsIndexed(viewModel.filters.value) { index,filter ->
                                 var field by remember { mutableStateOf(filter.value) }
                                 OutlinedTextField(value = field,
+                                    modifier = Modifier.padding(4.dp),
                                     singleLine = true,
-                                    onValueChange = { newValue -> },
-                                    label = { Text(filter.column.name.toRussian()) })
+                                    onValueChange = { newValue ->
+
+                                        if (newValue.length > 100) return@OutlinedTextField
+                                        val block = {
+                                            field = newValue
+                                            viewModel.filters.value.removeAt(index)
+                                            if (newValue.isNotEmpty()) {
+                                                filter.value = newValue
+                                                viewModel.filters.value.add(index,filter)
+                                            }
+                                        }
+                                        when (filter.column.columnType) {
+                                            is IntegerColumnType, is FloatColumnType -> {
+                                                if (newValue.all { it.isDigit() }) {
+                                                    block.invoke()
+                                                }
+                                            }
+                                            is StringColumnType -> {
+                                                block.invoke()
+                                            }
+                                            else -> throw RuntimeException("Unknown")
+                                        }
+                                    },
+                                    label = { Text(filter.column.name.toRussian()) }
+                                )
                             }
 
                         }
