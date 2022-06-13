@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import db.toRussian
 import extensions.screens.openWindow
+import ui.DescriptionScreen
 import ui.TablesSpinner
 import ui.views.ObjectPreviewCard
 
@@ -129,7 +130,7 @@ fun MainScreen(
                         items(commons.value){ common->
                             ObjectPreviewCard(common) {
                                 openWindow(common.previewText()) {
-
+                                    DescriptionScreen(common,viewModel)
                                 }
                             }
                             Spacer(modifier = Modifier.height(5.dp))

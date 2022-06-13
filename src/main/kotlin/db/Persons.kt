@@ -1,16 +1,20 @@
 package db
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
+import ui.ListItem
 import ui.filters.Filter
 
 object Persons : IntIdTable(), CommonTable {
@@ -25,7 +29,7 @@ object Persons : IntIdTable(), CommonTable {
     val birthCountry = varchar("birthCountry", 100)
     val nationality = varchar("nationality", 100)
     val citizen = varchar("citizen", 100)
-    val admissionForm = varchar("admissionForm",100)
+    val admissionForm = varchar("admissionForm", 100)
 
     override fun filters(): List<Filter> = columns.drop(1).map {
         Filter(it)
@@ -36,7 +40,7 @@ object Persons : IntIdTable(), CommonTable {
 
             val selected = selectAll()
 
-            filters.forEachIndexed{index, filter->
+            filters.forEachIndexed { index, filter ->
                 selected.andWhere {
                     (filter.column as Column<String>).upperCase().like("%${filter.value.uppercase()}%")
                 }
@@ -47,6 +51,7 @@ object Persons : IntIdTable(), CommonTable {
     }
 
 }
+
 class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
     companion object : IntEntityClass<Person>(Persons)
 
@@ -66,4 +71,22 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
     var addresses by Address via PersonsAddresses
 
     override fun previewText() = name
+
+    @Composable
+    override fun UIList() {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            ListItem(Persons.name.name.toRussian(), name)
+            ListItem(Persons.obj.name.toRussian(), obj)
+            ListItem(Persons.jobPosition.name.toRussian(), jobPosition)
+            ListItem(Persons.militaryRank.name.toRussian(), militaryRank)
+            ListItem(Persons.sex.name.toRussian(), sex)
+            ListItem(Persons.maidenName.name.toRussian(), maidenName)
+            ListItem(Persons.birthDay.name.toRussian(), birthDay)
+            ListItem(Persons.birthPlace.name.toRussian(), birthPlace)
+            ListItem(Persons.birthCountry.name.toRussian(), birthCountry)
+            ListItem(Persons.nationality.name.toRussian(), nationality)
+            ListItem(Persons.citizen.name.toRussian(), citizen)
+            ListItem(Persons.admissionForm.name.toRussian(), admissionForm)
+        }
+    }
 }

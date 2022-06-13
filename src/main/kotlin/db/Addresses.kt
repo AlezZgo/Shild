@@ -1,5 +1,11 @@
 package db
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -54,6 +60,13 @@ class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
     var persons by Person via PersonsAddresses
 
     override fun previewText() = "$street $house $building $apartment"
+
+    @Composable
+    override fun UIList() {
+        Column{
+
+        }
+    }
 }
 
 
