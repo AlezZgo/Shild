@@ -27,7 +27,6 @@ fun MainScreen(
     viewModel: AppViewModel,
 ) {
     var saved by remember { mutableStateOf(false) }
-    var list by remember { mutableStateOf(emptyList<Person>()) }
 
     if (saved) {
         AlertDialog(onDismissRequest = {},
@@ -61,9 +60,7 @@ fun MainScreen(
                 //todo Spinner
                 Row {
                     Button(modifier = Modifier.weight(1f).padding(4.dp), onClick = {
-                        list = transaction {
-                           Person.all().with(Person::addresses)
-                        }.toList()
+
                         //todo open window
                     }) {
                         Image(
@@ -92,22 +89,6 @@ fun MainScreen(
         Column(
             modifier = Modifier.fillMaxWidth().fillMaxHeight()
         ) {
-            Column {
-                list.forEach {
-                    Card {
-                        Column {
-                            Text(it.name)
-                            Row {
-                                it.addresses.forEach { address->
-                                    Text(address.street)
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-
             Column {
                 Card(modifier = Modifier.padding(top = 4.dp, end = 4.dp, bottom = 4.dp)) {
                     Column {
