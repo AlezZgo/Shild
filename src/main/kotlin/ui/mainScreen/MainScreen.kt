@@ -109,11 +109,10 @@ fun MainScreen(
                                             if (newValue.isNotEmpty()) {
                                                 viewModel.filters.value.add(filter.copy(value = newValue))
                                             }
+                                            viewModel.refresh()
                                         },
                                         label = { Text(filter.column.name.toRussian()) })
                                 }
-
-
                             }
                         }
 

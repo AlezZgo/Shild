@@ -27,11 +27,15 @@ object Addresses : IntIdTable(), CommonTable {
 
     override suspend fun all(filters: List<Filter>): List<CommonObject> {
         return transaction {
-            val selected = Address.all()
-            columns.forEachIndexed{ index, column->
+            val selected = selectAll()
 
+            filters.forEachIndexed{index, filter->
+                selected.andWhere {
+                    (filter.column as Column<String>).upperCase().like("%${filter.value.uppercase()}%")
+                }
             }
-            return@transaction selected.toList()
+
+            return@transaction Address.wrapRows(selected).toList()
         }
     }
 }

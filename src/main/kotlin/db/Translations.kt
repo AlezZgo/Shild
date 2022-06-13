@@ -17,6 +17,12 @@ fun String.toRussian() : String = when(this){
     "sex" -> "Пол"
     "maidenName" -> "Девичья фамилия"
     "weight" -> "Вес"
+    "type" -> "Тип"
+    "locality" -> "Населённый пункт"
+    "street" -> "Улица"
+    "house" -> "Дом"
+    "building" -> "Улица"
+    "apartment" -> "Квартира"
     "address","address_id" -> "Адрес"
 
     "Addresses" -> "Адреса"
