@@ -4,9 +4,15 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
+import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.upperCase
 import ui.filters.Filter
 
-object Addresses : IntIdTable(), CustomTable {
+object Addresses : IntIdTable(), CommonTable {
     val type = varchar("type", 100)
     val ate = varchar("ate", 100)
     val locality = varchar("locality", 100)
@@ -18,9 +24,19 @@ object Addresses : IntIdTable(), CustomTable {
     override fun filters(): List<Filter> = columns.drop(1).map {
         Filter(it)
     }
+
+    override suspend fun all(filters: List<Filter>): List<CommonObject> {
+        return transaction {
+            val selected = Address.all()
+            columns.forEachIndexed{ index, column->
+
+            }
+            return@transaction selected.toList()
+        }
+    }
 }
 
-class Address(id: EntityID<Int>) : IntEntity(id) {
+class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
     companion object : IntEntityClass<Address>(Addresses)
 
     var type by Addresses.type
@@ -32,6 +48,8 @@ class Address(id: EntityID<Int>) : IntEntity(id) {
     var apartment by Addresses.apartment
 
     var persons by Person via PersonsAddresses
+
+    override fun previewText() = "$street $house $building $apartment"
 }
 
 

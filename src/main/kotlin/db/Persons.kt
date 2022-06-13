@@ -4,9 +4,16 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
+import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.upperCase
 import ui.filters.Filter
 
-object Persons : IntIdTable(), CustomTable {
+object Persons : IntIdTable(), CommonTable {
     val name = varchar("name", 100).uniqueIndex()
     val obj = varchar("object", 100)
     val jobPosition = varchar("jobPosition", 100)
@@ -24,8 +31,19 @@ object Persons : IntIdTable(), CustomTable {
         Filter(it)
     }
 
+    override suspend fun all(filters: List<Filter>): List<CommonObject> {
+        return transaction {
+            val selected = Person.all()
+            columns.forEachIndexed{index,column->
+
+            }
+
+            return@transaction selected.toList()
+        }
+    }
+
 }
-class Person(id: EntityID<Int>) : IntEntity(id) {
+class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
     companion object : IntEntityClass<Person>(Persons)
 
     var name by Persons.name
@@ -42,4 +60,6 @@ class Person(id: EntityID<Int>) : IntEntity(id) {
     var admissionForm by Persons.admissionForm
 
     var addresses by Address via PersonsAddresses
+
+    override fun previewText() = name
 }

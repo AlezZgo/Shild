@@ -12,17 +12,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import db.toRussian
-import org.jetbrains.exposed.sql.FloatColumnType
-import org.jetbrains.exposed.sql.IntegerColumnType
-import org.jetbrains.exposed.sql.StringColumnType
+import extensions.screens.openWindow
 import ui.TablesSpinner
-import ui.filters.Filter
+import ui.views.ObjectPreviewCard
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(
     viewModel: AppViewModel,
 ) {
+    val commons = viewModel.commons.collectAsState()
     var saved by remember { mutableStateOf(false) }
     val currentTable = viewModel.currentTable.collectAsState()
 
@@ -128,7 +127,14 @@ fun MainScreen(
                     LazyColumn(
                         modifier = Modifier, state
                     ) {
-                        //todo preview cards
+                        items(commons.value){ common->
+                            ObjectPreviewCard(common) {
+                                openWindow(common.previewText()) {
+
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(5.dp))
+                        }
                     }
                     VerticalScrollbar(
                         modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
