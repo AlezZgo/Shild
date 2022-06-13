@@ -81,7 +81,7 @@ private fun initDB(){
                 street = "Белых"
                 house = "4"
                 building = "11"
-                apartment = ""
+                apartment = "41"
             }
 
             val sasha = Person.new {
@@ -96,7 +96,7 @@ private fun initDB(){
                 birthCountry = "Украина"
                 nationality = "украинец"
                 citizen = "Россия"
-                admissionForm = 3
+                admissionForm = "3"
             }
 
             val dima = Person.new {
@@ -111,7 +111,7 @@ private fun initDB(){
                 birthCountry = "Россия"
                 nationality = "русский"
                 citizen = "Россия"
-                admissionForm = 2
+                admissionForm = "2"
             }
 
             val ann = Person.new {
@@ -126,7 +126,7 @@ private fun initDB(){
                 birthCountry = "Россия"
                 nationality = "русская"
                 citizen = "Россия"
-                admissionForm = 4
+                admissionForm = "4"
             }
 
             sasha.addresses = SizedCollection(listOf(addr1))

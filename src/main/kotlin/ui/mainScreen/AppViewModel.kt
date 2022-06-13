@@ -16,8 +16,4 @@ class AppViewModel(val tables: List<Table>) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    init {
-        coroutineScope.launch { filters.emit(currentTable.value.filters().toMutableList()) }
-    }
-
 }

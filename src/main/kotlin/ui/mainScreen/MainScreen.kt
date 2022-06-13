@@ -16,6 +16,7 @@ import org.jetbrains.exposed.sql.FloatColumnType
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.StringColumnType
 import ui.TablesSpinner
+import ui.filters.Filter
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -102,25 +103,12 @@ fun MainScreen(
                                         singleLine = true,
                                         onValueChange = { newValue ->
                                             if (newValue.length > 100) return@OutlinedTextField
-                                            val block = {
-                                                field = newValue
-                                                viewModel.filters.value.removeIf {
-                                                    it == filter
-                                                }
-                                                if (newValue.isNotEmpty()) {
-                                                    viewModel.filters.value.add(filter)
-                                                }
+                                            field = newValue
+                                            viewModel.filters.value.removeIf {
+                                                it.column == filter.column
                                             }
-                                            when (filter.column.columnType) {
-                                                is IntegerColumnType, is FloatColumnType -> {
-                                                    if (newValue.all { it.isDigit() }) {
-                                                        block.invoke()
-                                                    }
-                                                }
-                                                is StringColumnType -> {
-                                                    block.invoke()
-                                                }
-                                                else -> throw RuntimeException("Unknown")
+                                            if (newValue.isNotEmpty()) {
+                                                viewModel.filters.value.add(filter.copy(value = newValue))
                                             }
                                         },
                                         label = { Text(filter.column.name.toRussian()) })

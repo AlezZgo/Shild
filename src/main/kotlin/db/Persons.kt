@@ -18,7 +18,7 @@ object Persons : IntIdTable(), CustomTable {
     val birthCountry = varchar("birthCountry", 100)
     val nationality = varchar("nationality", 100)
     val citizen = varchar("citizen", 100)
-    val admissionForm = integer("admissionForm")
+    val admissionForm = varchar("admissionForm",100)
 
     override fun filters(): List<Filter> = columns.drop(1).map {
         Filter(it)
