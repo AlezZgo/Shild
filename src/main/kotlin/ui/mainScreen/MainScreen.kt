@@ -20,6 +20,7 @@ import db.Persons
 import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.dao.with
 import org.jetbrains.exposed.sql.transactions.transaction
+import ui.TablesSpinner
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -27,6 +28,7 @@ fun MainScreen(
     viewModel: AppViewModel,
 ) {
     var saved by remember { mutableStateOf(false) }
+    val currentTable = viewModel.currentTable.collectAsState()
 
     if (saved) {
         AlertDialog(onDismissRequest = {},
@@ -57,7 +59,7 @@ fun MainScreen(
         ) {
 
             Column {
-                //todo Spinner
+                TablesSpinner(viewModel)
                 Row {
                     Button(modifier = Modifier.weight(1f).padding(4.dp), onClick = {
 
