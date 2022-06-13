@@ -4,8 +4,9 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
+import ui.filters.Filter
 
-object Addresses : IntIdTable() {
+object Addresses : IntIdTable(), CustomTable {
     val type = varchar("type", 100)
     val ate = varchar("ate", 100)
     val locality = varchar("locality", 100)
@@ -13,6 +14,10 @@ object Addresses : IntIdTable() {
     val house = varchar("house", 100)
     val building = varchar("building", 100)
     val apartment = varchar("apartment", 100)
+
+    override fun filters(): List<Filter> = columns.map {
+        Filter(it)
+    }
 }
 
 class Address(id: EntityID<Int>) : IntEntity(id) {
