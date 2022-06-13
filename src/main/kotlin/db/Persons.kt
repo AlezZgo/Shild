@@ -20,7 +20,7 @@ object Persons : IntIdTable(), CustomTable {
     val citizen = varchar("citizen", 100)
     val admissionForm = integer("admissionForm")
 
-    override fun filters(): List<Filter> = columns.map {
+    override fun filters(): List<Filter> = columns.drop(1).map {
         Filter(it)
     }
 

@@ -15,7 +15,7 @@ object Addresses : IntIdTable(), CustomTable {
     val building = varchar("building", 100)
     val apartment = varchar("apartment", 100)
 
-    override fun filters(): List<Filter> = columns.map {
+    override fun filters(): List<Filter> = columns.drop(1).map {
         Filter(it)
     }
 }

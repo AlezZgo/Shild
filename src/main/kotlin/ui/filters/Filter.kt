@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.IntegerColumnType
 import org.jetbrains.exposed.sql.StringColumnType
 
-class Filter(private val column: Column<*>, var value: String = "") : ChangeValue {
+class Filter(val column: Column<*>, var value: String = "") : ChangeValue {
     override fun changeValue(newValue: String) {
         when (column.columnType) {
             is IntegerColumnType -> {

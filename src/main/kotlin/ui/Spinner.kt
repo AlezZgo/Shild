@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import db.CustomTable
 import db.toRussian
+import org.jetbrains.exposed.sql.Table
 import ui.mainScreen.AppViewModel
 
 @Composable
@@ -33,7 +35,7 @@ fun TablesSpinner(viewModel: AppViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) { // Anchor view
             Text(
-                text = viewModel.currentTable.value.tableName.toRussian(),
+                text = (viewModel.currentTable.value as Table).tableName.toRussian(),
                 fontSize = 18.sp,
                 modifier = Modifier.padding(end = 8.dp)
             )
@@ -45,7 +47,7 @@ fun TablesSpinner(viewModel: AppViewModel) {
                 viewModel.tables.forEach { table ->
                     DropdownMenuItem(onClick = {
                         expanded = false
-                        currentTable.value = table
+                        currentTable.value = table as CustomTable
 //                        viewModel.filters.value.clear()
 //                        viewModel.refresh()
                     }) {

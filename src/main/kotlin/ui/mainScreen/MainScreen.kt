@@ -2,10 +2,7 @@ package ui.mainScreen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,12 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import db.Address
-import db.Person
-import db.Persons
-import org.jetbrains.exposed.dao.load
-import org.jetbrains.exposed.dao.with
-import org.jetbrains.exposed.sql.transactions.transaction
+import db.toRussian
 import ui.TablesSpinner
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
@@ -97,7 +89,14 @@ fun MainScreen(
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(4)
                         ) {
-                            // todo filter items
+                            items(currentTable.value.filters()) { filter ->
+                                var field by remember { mutableStateOf(filter.value) }
+                                OutlinedTextField(value = field,
+                                    singleLine = true,
+                                    onValueChange = { newValue -> },
+                                    label = { Text(filter.column.name.toRussian()) })
+                            }
+
                         }
                     }
                 }
