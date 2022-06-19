@@ -1,21 +1,20 @@
 package db
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upperCase
+import ui.ListItem
 import ui.filters.Filter
 
 object Addresses : IntIdTable(), CommonTable {
@@ -62,9 +61,30 @@ class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
     override fun previewText() = "$street $house $building $apartment"
 
     @Composable
-    override fun UIList() {
-        Column{
+    override fun UIList(isEditMode: Boolean) {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            ListItem(Addresses.type.name.toRussian(), type,isEditMode)
+            ListItem(Addresses.ate.name.toRussian(), ate,isEditMode)
+            ListItem(Addresses.locality.name.toRussian(), locality,isEditMode)
+            ListItem(Addresses.street.name.toRussian(), street,isEditMode)
+            ListItem(Addresses.house.name.toRussian(), house,isEditMode)
+            ListItem(Addresses.building .name.toRussian(), building,isEditMode)
+            ListItem(Addresses.apartment.name.toRussian(), apartment,isEditMode)
+        }
+    }
 
+//    override fun listOfParams(): List<String> {
+//        TODO("Not yet implemented")
+//    }
+
+    override suspend fun update(updatedParams: List<String>) {
+        transaction {
+            type = updatedParams[0]
+            ate = updatedParams[1]
+            locality = updatedParams[2]
+            street = updatedParams[3]
+            house = updatedParams[4]
+            building = updatedParams[5]
         }
     }
 }

@@ -73,20 +73,42 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
     override fun previewText() = name
 
     @Composable
-    override fun UIList() {
+    override fun UIList(isEditMode: Boolean) {
+
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            ListItem(Persons.name.name.toRussian(), name)
-            ListItem(Persons.obj.name.toRussian(), obj)
-            ListItem(Persons.jobPosition.name.toRussian(), jobPosition)
-            ListItem(Persons.militaryRank.name.toRussian(), militaryRank)
-            ListItem(Persons.sex.name.toRussian(), sex)
-            ListItem(Persons.maidenName.name.toRussian(), maidenName)
-            ListItem(Persons.birthDay.name.toRussian(), birthDay)
-            ListItem(Persons.birthPlace.name.toRussian(), birthPlace)
-            ListItem(Persons.birthCountry.name.toRussian(), birthCountry)
-            ListItem(Persons.nationality.name.toRussian(), nationality)
-            ListItem(Persons.citizen.name.toRussian(), citizen)
-            ListItem(Persons.admissionForm.name.toRussian(), admissionForm)
+            ListItem(Persons.name.name.toRussian(), name,isEditMode)
+            ListItem(Persons.obj.name.toRussian(), obj,isEditMode)
+            ListItem(Persons.jobPosition.name.toRussian(), jobPosition,isEditMode)
+            ListItem(Persons.militaryRank.name.toRussian(), militaryRank,isEditMode)
+            ListItem(Persons.sex.name.toRussian(), sex,isEditMode)
+            ListItem(Persons.maidenName.name.toRussian(), maidenName,isEditMode)
+            ListItem(Persons.birthDay.name.toRussian(), birthDay,isEditMode)
+            ListItem(Persons.birthPlace.name.toRussian(), birthPlace,isEditMode)
+            ListItem(Persons.birthCountry.name.toRussian(), birthCountry,isEditMode)
+            ListItem(Persons.nationality.name.toRussian(), nationality,isEditMode)
+            ListItem(Persons.citizen.name.toRussian(), citizen,isEditMode)
+            ListItem(Persons.admissionForm.name.toRussian(), admissionForm,isEditMode)
+        }
+    }
+
+//    override fun listOfParams(): List<String> {
+//        TODO("Not yet implemented")
+//    }
+
+    override suspend fun update(updatedParams: List<String>) {
+        transaction {
+            name = updatedParams[0]
+            obj = updatedParams[1]
+            jobPosition = updatedParams[2]
+            militaryRank = updatedParams[3]
+            sex = updatedParams[4]
+            maidenName = updatedParams[5]
+            birthDay = updatedParams[6]
+            birthPlace = updatedParams[7]
+            birthCountry = updatedParams[8]
+            nationality = updatedParams[9]
+            citizen = updatedParams[10]
+            admissionForm = updatedParams[11]
         }
     }
 }

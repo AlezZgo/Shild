@@ -11,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import db.CommonObject
 import ui.mainScreen.AppViewModel
 
-
 @Composable
 fun DescriptionScreen(
     model: CommonObject,
@@ -20,7 +19,7 @@ fun DescriptionScreen(
 
     var deleted by remember { mutableStateOf(false) }
     var isEditMode by remember { mutableStateOf(false) }
-//    var newModel by remember { mutableStateOf(model.params.toMutableList()) }
+//    var newModel by remember { mutableStateOf(model.listOfParams()) }
 
     Card(modifier = Modifier.fillMaxSize().padding(4.dp)) {
         Column {
@@ -65,7 +64,10 @@ fun DescriptionScreen(
                         }
                     }
                 }
-                model.UIList()
+                isEditMode.let {
+                    model.UIList(it)
+                }
+
 
             }
 

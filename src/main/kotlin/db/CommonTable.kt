@@ -2,7 +2,7 @@ package db
 
 import ui.filters.Filter
 
-interface CommonTable {
+interface CommonTable  {
 
     fun filters() : List<Filter>
 
