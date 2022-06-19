@@ -33,10 +33,12 @@ class AppViewModel(val tables: List<Table>) {
         }
     }
 
-    fun edit(model: CommonObject, newModel: CommonObject) {
+    fun edit(model: CommonObject, newModel: List<String>) {
         coroutineScope.launch {
             model.edit(newModel)
+            refresh()
         }
+
     }
 
 

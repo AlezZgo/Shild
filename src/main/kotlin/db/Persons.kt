@@ -80,21 +80,21 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
 
     override fun table(): Table = Persons
 
-    override suspend fun edit(newModel: CommonObject) {
-        newModel as Person
+    override suspend fun edit(newValues: List<String>) {
+
         transaction {
-            name = newModel.name
-            obj = newModel.obj
-            jobPosition = newModel.jobPosition
-            militaryRank = newModel.militaryRank
-            sex = newModel.sex
-            maidenName = newModel.maidenName
-            birthDay = newModel.birthDay
-            birthPlace = newModel.birthPlace
-            birthCountry = newModel.birthCountry
-            nationality = newModel.nationality
-            citizen = newModel.citizen
-            admissionForm = newModel.admissionForm
+            name = newValues[0]
+            obj = newValues[1]
+            jobPosition = newValues[2]
+            militaryRank = newValues[3]
+            sex = newValues[4]
+            maidenName = newValues[5]
+            birthDay = newValues[6]
+            birthPlace = newValues[7]
+            birthCountry = newValues[8]
+            nationality = newValues[9]
+            citizen = newValues[10]
+            admissionForm = newValues[11]
         }
     }
 

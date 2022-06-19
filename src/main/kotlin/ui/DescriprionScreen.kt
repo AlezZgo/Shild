@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import db.CommonObject
 import db.toRussian
@@ -22,7 +23,7 @@ fun DescriptionScreen(
 
     var deleted by remember { mutableStateOf(false) }
     var isEditMode by remember { mutableStateOf(false) }
-    var newModel by remember { mutableStateOf(model) }
+    var newValues by remember { mutableStateOf(model.listOfValues().toMutableList()) }
 
     Card(modifier = Modifier.fillMaxSize().padding(4.dp)) {
         Column {
@@ -34,7 +35,7 @@ fun DescriptionScreen(
                 if (isEditMode) {
                     Row(modifier = Modifier.fillMaxWidth().padding(4.dp)) {
                         Button(modifier = Modifier.padding(4.dp).weight(1f), onClick = {
-                            viewModel.edit(model,newModel)
+                            viewModel.edit(model,newValues.toList())
 
                             isEditMode = false
                         }) {
@@ -70,7 +71,25 @@ fun DescriptionScreen(
                 }
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     model.table().columns.drop(1).forEachIndexed { index, column->
-                        ListItem(column.name.toRussian(),newModel.listOfValues().elementAt(index),isEditMode)
+
+                        var content by remember { mutableStateOf(model.listOfValues().elementAt(index)) }
+
+                        Text(
+                            text = column.name.toRussian(),
+                            modifier = Modifier.fillMaxWidth().padding(4.dp),
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        OutlinedTextField(
+                            value = content,
+                            modifier = Modifier.fillMaxWidth().padding(4.dp),
+                            enabled = isEditMode,
+                            onValueChange = { newValue ->
+                                if (newValue.length > 100) return@OutlinedTextField
+
+                                content = newValue
+                                newValues[index] = newValue
+                            })
                     }
                 }
 

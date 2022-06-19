@@ -2,5 +2,5 @@ package db
 
 interface Edit {
 
-    suspend fun edit(newModel: CommonObject)
+    suspend fun edit(newModel: List<String>)
 }

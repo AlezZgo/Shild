@@ -1,17 +1,11 @@
 package db
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import ui.ListItem
 import ui.filters.Filter
 
 object Addresses : IntIdTable(), CommonTable {
@@ -67,15 +61,14 @@ class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
 
     override fun table(): Table = Addresses
 
-    override suspend fun edit(newModel: CommonObject) {
-        newModel as Address
+    override suspend fun edit(newValues: List<String>) {
         transaction {
-            type = newModel.type
-            ate = newModel.ate
-            locality = newModel.locality
-            street = newModel.street
-            house = newModel.house
-            building = newModel.building
+            type = newValues[0]
+            ate = newValues[1]
+            locality = newValues[2]
+            street = newValues[3]
+            house = newValues[4]
+            building = newValues[5]
         }
     }
 }
