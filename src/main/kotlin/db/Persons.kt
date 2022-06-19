@@ -78,6 +78,12 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
         admissionForm
     )
 
+    override suspend fun listOfLinks(): List<Pair<String,List<CommonObject>>> {
+        return transaction {
+            listOf(Addresses.tableName.toRussian() to addresses.toList())
+        }
+    }
+
     override fun table(): Table = Persons
 
     override suspend fun edit(newValues: List<String>) {

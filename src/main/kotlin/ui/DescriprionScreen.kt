@@ -13,17 +13,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import db.CommonObject
 import db.toRussian
+import kotlinx.coroutines.flow.MutableStateFlow
 import ui.mainScreen.AppViewModel
 
 @Composable
 fun DescriptionScreen(
     model: CommonObject,
-    viewModel: AppViewModel
+    viewModel: AppViewModel,
+    descriptionViewModel: DescriptionViewModel
 ) {
 
     var deleted by remember { mutableStateOf(false) }
     var isEditMode by remember { mutableStateOf(false) }
     var newValues by remember { mutableStateOf(model.listOfValues().toMutableList()) }
+    val links = descriptionViewModel.links.collectAsState()
 
     Card(modifier = Modifier.fillMaxSize().padding(4.dp)) {
         Column {
@@ -35,7 +38,7 @@ fun DescriptionScreen(
                 if (isEditMode) {
                     Row(modifier = Modifier.fillMaxWidth().padding(4.dp)) {
                         Button(modifier = Modifier.padding(4.dp).weight(1f), onClick = {
-                            viewModel.edit(model,newValues.toList())
+                            viewModel.edit(model, newValues.toList())
 
                             isEditMode = false
                         }) {
@@ -70,7 +73,10 @@ fun DescriptionScreen(
                     }
                 }
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    model.table().columns.drop(1).forEachIndexed { index, column->
+
+                    var listOfLinks = MutableStateFlow(emptyList<CommonObject>())
+
+                    model.table().columns.drop(1).forEachIndexed { index, column ->
 
                         var content by remember { mutableStateOf(model.listOfValues().elementAt(index)) }
 
@@ -91,6 +97,35 @@ fun DescriptionScreen(
                                 newValues[index] = newValue
                             })
                     }
+                    Column {
+
+                        links.value.forEach { pairOfLinkNameAndObjects ->
+
+                            Text(
+                                text = pairOfLinkNameAndObjects.first,
+                                modifier = Modifier.fillMaxWidth().padding(4.dp),
+                                fontWeight = FontWeight.Bold
+                            )
+                            pairOfLinkNameAndObjects.second.forEach {
+                                Column(modifier = Modifier.padding(start = 8.dp)) {
+                                    Text(
+                                        text = it.previewText(),
+                                        modifier = Modifier.fillMaxWidth().padding(4.dp),
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                    OutlinedTextField(
+                                        value = it.listOfValues().first(),
+                                        modifier = Modifier.fillMaxWidth().padding(4.dp),
+                                        onValueChange = { newValue ->
+                                        })
+                                }
+                            }
+                        }
+
+
+                    }
+
                 }
 
             }

@@ -14,17 +14,18 @@ import androidx.compose.ui.unit.dp
 import db.toRussian
 import extensions.screens.openWindow
 import ui.DescriptionScreen
+import ui.DescriptionViewModel
 import ui.TablesSpinner
 import ui.views.ObjectPreviewCard
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(
-    viewModel: AppViewModel,
+    appViewModel: AppViewModel,
 ) {
-    val commons = viewModel.commons.collectAsState()
+    val commons = appViewModel.commons.collectAsState()
     var saved by remember { mutableStateOf(false) }
-    val currentTable = viewModel.currentTable.collectAsState()
+    val currentTable = appViewModel.currentTable.collectAsState()
 
     if (saved) {
         AlertDialog(onDismissRequest = {},
@@ -55,7 +56,7 @@ fun MainScreen(
         ) {
 
             Column {
-                TablesSpinner(viewModel)
+                TablesSpinner(appViewModel)
                 Row {
                     Button(modifier = Modifier.weight(1f).padding(4.dp), onClick = {
 
@@ -104,13 +105,13 @@ fun MainScreen(
                                         onValueChange = { newValue ->
                                             if (newValue.length > 100) return@OutlinedTextField
                                             field = newValue
-                                            viewModel.filters.value.removeIf {
+                                            appViewModel.filters.value.removeIf {
                                                 it.column == filter.column
                                             }
                                             if (newValue.isNotEmpty()) {
-                                                viewModel.filters.value.add(filter.copy(value = newValue))
+                                                appViewModel.filters.value.add(filter.copy(value = newValue))
                                             }
-                                            viewModel.refresh()
+                                            appViewModel.refresh()
                                         },
                                         label = { Text(filter.column.name.toRussian()) })
                                 }
@@ -130,7 +131,7 @@ fun MainScreen(
                         items(commons.value){ common->
                             ObjectPreviewCard(common) {
                                 openWindow(common.previewText()) {
-                                    DescriptionScreen(common,viewModel)
+                                    DescriptionScreen(common,appViewModel,DescriptionViewModel(common))
                                 }
                             }
                             Spacer(modifier = Modifier.height(5.dp))

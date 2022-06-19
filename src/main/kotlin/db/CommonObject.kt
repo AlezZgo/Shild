@@ -7,7 +7,11 @@ interface CommonObject : Edit {
 
     fun listOfValues() : List<String>
 
+    suspend fun listOfLinks():  List<Pair<String,List<CommonObject>>>
+
     fun table() : Table
+
+
 
     override suspend fun edit(newValues: List<String>)
 

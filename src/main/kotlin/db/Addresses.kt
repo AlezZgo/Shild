@@ -59,6 +59,12 @@ class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
             building,
             apartment)
 
+    override suspend fun listOfLinks(): List<Pair<String,List<CommonObject>>> {
+        return transaction {
+            listOf(Persons.tableName.toRussian() to persons.toList())
+        }
+    }
+
     override fun table(): Table = Addresses
 
     override suspend fun edit(newValues: List<String>) {
