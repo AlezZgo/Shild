@@ -1,13 +1,17 @@
 package db
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import org.jetbrains.exposed.sql.Table
 
-interface CommonObject : Update {
+interface CommonObject : Edit {
     fun previewText() : String
 
-    @Composable
-    fun UIList(isEditMode:Boolean)
+    fun listOfValues() : List<String>
 
-//    fun listOfParams() : List<String>
+    fun table() : Table
+
+    override suspend fun edit(newModel: CommonObject)
+
+
+
 }

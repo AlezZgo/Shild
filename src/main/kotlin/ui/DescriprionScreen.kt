@@ -2,6 +2,8 @@ package ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -9,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import db.CommonObject
+import db.toRussian
 import ui.mainScreen.AppViewModel
 
 @Composable
@@ -19,7 +22,7 @@ fun DescriptionScreen(
 
     var deleted by remember { mutableStateOf(false) }
     var isEditMode by remember { mutableStateOf(false) }
-//    var newModel by remember { mutableStateOf(model.listOfParams()) }
+    var newModel by remember { mutableStateOf(model) }
 
     Card(modifier = Modifier.fillMaxSize().padding(4.dp)) {
         Column {
@@ -31,7 +34,8 @@ fun DescriptionScreen(
                 if (isEditMode) {
                     Row(modifier = Modifier.fillMaxWidth().padding(4.dp)) {
                         Button(modifier = Modifier.padding(4.dp).weight(1f), onClick = {
-//                            viewModel.edit(model, UIModel(newModel.toList()), table)
+                            viewModel.edit(model,newModel)
+
                             isEditMode = false
                         }) {
                             Text(text = "Сохранить")
@@ -64,10 +68,11 @@ fun DescriptionScreen(
                         }
                     }
                 }
-                isEditMode.let {
-                    model.UIList(it)
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    model.table().columns.drop(1).forEachIndexed { index, column->
+                        ListItem(column.name.toRussian(),newModel.listOfValues().elementAt(index),isEditMode)
+                    }
                 }
-
 
             }
 

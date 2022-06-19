@@ -9,11 +9,8 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.upperCase
 import ui.ListItem
 import ui.filters.Filter
 
@@ -60,31 +57,25 @@ class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
 
     override fun previewText() = "$street $house $building $apartment"
 
-    @Composable
-    override fun UIList(isEditMode: Boolean) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            ListItem(Addresses.type.name.toRussian(), type,isEditMode)
-            ListItem(Addresses.ate.name.toRussian(), ate,isEditMode)
-            ListItem(Addresses.locality.name.toRussian(), locality,isEditMode)
-            ListItem(Addresses.street.name.toRussian(), street,isEditMode)
-            ListItem(Addresses.house.name.toRussian(), house,isEditMode)
-            ListItem(Addresses.building .name.toRussian(), building,isEditMode)
-            ListItem(Addresses.apartment.name.toRussian(), apartment,isEditMode)
-        }
-    }
+    override fun listOfValues() = listOf(type,
+            ate,
+            locality,
+            street,
+            house,
+            building,
+            apartment)
 
-//    override fun listOfParams(): List<String> {
-//        TODO("Not yet implemented")
-//    }
+    override fun table(): Table = Addresses
 
-    override suspend fun update(updatedParams: List<String>) {
+    override suspend fun edit(newModel: CommonObject) {
+        newModel as Address
         transaction {
-            type = updatedParams[0]
-            ate = updatedParams[1]
-            locality = updatedParams[2]
-            street = updatedParams[3]
-            house = updatedParams[4]
-            building = updatedParams[5]
+            type = newModel.type
+            ate = newModel.ate
+            locality = newModel.locality
+            street = newModel.street
+            house = newModel.house
+            building = newModel.building
         }
     }
 }

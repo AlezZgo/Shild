@@ -1,20 +1,11 @@
 package db
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.upperCase
-import ui.ListItem
 import ui.filters.Filter
 
 object Persons : IntIdTable(), CommonTable {
@@ -72,43 +63,40 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
 
     override fun previewText() = name
 
-    @Composable
-    override fun UIList(isEditMode: Boolean) {
+    override fun listOfValues() = listOf(
+        name,
+        obj,
+        jobPosition,
+        militaryRank,
+        sex,
+        maidenName,
+        birthDay,
+        birthPlace,
+        birthCountry,
+        nationality,
+        citizen,
+        admissionForm
+    )
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            ListItem(Persons.name.name.toRussian(), name,isEditMode)
-            ListItem(Persons.obj.name.toRussian(), obj,isEditMode)
-            ListItem(Persons.jobPosition.name.toRussian(), jobPosition,isEditMode)
-            ListItem(Persons.militaryRank.name.toRussian(), militaryRank,isEditMode)
-            ListItem(Persons.sex.name.toRussian(), sex,isEditMode)
-            ListItem(Persons.maidenName.name.toRussian(), maidenName,isEditMode)
-            ListItem(Persons.birthDay.name.toRussian(), birthDay,isEditMode)
-            ListItem(Persons.birthPlace.name.toRussian(), birthPlace,isEditMode)
-            ListItem(Persons.birthCountry.name.toRussian(), birthCountry,isEditMode)
-            ListItem(Persons.nationality.name.toRussian(), nationality,isEditMode)
-            ListItem(Persons.citizen.name.toRussian(), citizen,isEditMode)
-            ListItem(Persons.admissionForm.name.toRussian(), admissionForm,isEditMode)
-        }
-    }
+    override fun table(): Table = Persons
 
-//    override fun listOfParams(): List<String> {
-//        TODO("Not yet implemented")
-//    }
-
-    override suspend fun update(updatedParams: List<String>) {
+    override suspend fun edit(newModel: CommonObject) {
+        newModel as Person
         transaction {
-            name = updatedParams[0]
-            obj = updatedParams[1]
-            jobPosition = updatedParams[2]
-            militaryRank = updatedParams[3]
-            sex = updatedParams[4]
-            maidenName = updatedParams[5]
-            birthDay = updatedParams[6]
-            birthPlace = updatedParams[7]
-            birthCountry = updatedParams[8]
-            nationality = updatedParams[9]
-            citizen = updatedParams[10]
-            admissionForm = updatedParams[11]
+            name = newModel.name
+            obj = newModel.obj
+            jobPosition = newModel.jobPosition
+            militaryRank = newModel.militaryRank
+            sex = newModel.sex
+            maidenName = newModel.maidenName
+            birthDay = newModel.birthDay
+            birthPlace = newModel.birthPlace
+            birthCountry = newModel.birthCountry
+            nationality = newModel.nationality
+            citizen = newModel.citizen
+            admissionForm = newModel.admissionForm
         }
     }
+
+
 }
