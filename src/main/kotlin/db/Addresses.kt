@@ -77,6 +77,14 @@ class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
             building = newValues[5]
         }
     }
+
+    override suspend fun remove() {
+
+
+        transaction {
+            delete()
+        }
+    }
 }
 
 

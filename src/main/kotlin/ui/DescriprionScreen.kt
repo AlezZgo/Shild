@@ -66,7 +66,7 @@ fun DescriptionScreen(
                                 contentColor = Color.White
                             ),
                             onClick = {
-//                                viewModel.delete(UIModel(newModel.toList()), table)
+                                viewModel.delete(model)
                                 deleted = true
                             }) {
                             Text(text = "Удалить", modifier = Modifier.align(Alignment.CenterVertically))

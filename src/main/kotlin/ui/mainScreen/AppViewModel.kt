@@ -41,5 +41,13 @@ class AppViewModel(val tables: List<Table>) {
 
     }
 
+    fun delete(model : CommonObject){
+        coroutineScope.launch {
+            model.remove()
+            refresh()
+        }
+
+    }
+
 
 }

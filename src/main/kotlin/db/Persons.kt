@@ -63,6 +63,13 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
 
     override fun previewText() = name
 
+    override suspend fun remove() {
+
+        transaction {
+            delete()
+        }
+    }
+
     override fun listOfValues() = listOf(
         name,
         obj,
