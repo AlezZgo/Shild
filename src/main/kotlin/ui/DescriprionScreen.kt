@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import db.CommonObject
 import db.toRussian
+import extensions.screens.openWindow
 import kotlinx.coroutines.flow.MutableStateFlow
 import ui.mainScreen.AppViewModel
 
@@ -107,18 +108,15 @@ fun DescriptionScreen(
                                 fontWeight = FontWeight.Bold
                             )
                             pairOfLinkNameAndObjects.second.forEach {
-                                Column(modifier = Modifier.padding(start = 8.dp)) {
-                                    Text(
-                                        text = it.previewText(),
-                                        modifier = Modifier.fillMaxWidth().padding(4.dp),
-                                        fontWeight = FontWeight.Bold
-                                    )
 
-                                    OutlinedTextField(
-                                        value = it.listOfValues().first(),
-                                        modifier = Modifier.fillMaxWidth().padding(4.dp),
-                                        onValueChange = { newValue ->
-                                        })
+                                TextButton(modifier = Modifier.padding(4.dp),
+                                    onClick = {
+                                        openWindow(it.previewText()) {
+                                            DescriptionScreen(it, viewModel, DescriptionViewModel(it))
+                                        }
+                                    }) {
+                                    Text(text = it.previewText())
+
                                 }
                             }
                         }
