@@ -51,7 +51,7 @@ private fun initDB(){
 
     transaction {
         tables.forEach {
-            SchemaUtils.create(it)
+            SchemaUtils.createMissingTablesAndColumns(it)
         }
         if (toFill) {
             val addr1 = Address.new {
