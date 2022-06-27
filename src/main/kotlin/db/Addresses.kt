@@ -34,6 +34,8 @@ object Addresses : IntIdTable(), CommonTable {
             return@transaction Address.wrapRows(selected).toList()
         }
     }
+
+    override fun entity(): Class<Address> = Address::class.java
 }
 
 class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {

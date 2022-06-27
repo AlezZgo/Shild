@@ -7,6 +7,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import ui.filters.Filter
+import kotlin.reflect.KClass
 
 object Persons : IntIdTable(), CommonTable {
     val name = varchar("name", 100).uniqueIndex()
@@ -40,6 +41,8 @@ object Persons : IntIdTable(), CommonTable {
             return@transaction Person.wrapRows(selected).toList()
         }
     }
+
+    override fun entity(): Class<Person> = Person::class.java
 
 }
 

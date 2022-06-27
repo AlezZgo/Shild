@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import db.toRussian
 import extensions.screens.openWindow
+import ui.AddingScreen
 import ui.DescriptionScreen
 import ui.DescriptionViewModel
 import ui.TablesSpinner
@@ -60,7 +61,9 @@ fun MainScreen(
                 Row {
                     Button(modifier = Modifier.weight(1f).padding(4.dp), onClick = {
 
-                        //todo open window
+                        openWindow("Создание нового объекта",){
+                            AddingScreen(appViewModel)
+                        }
                     }) {
                         Image(
                             painterResource("plus.png"),
