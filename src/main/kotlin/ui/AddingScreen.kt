@@ -36,6 +36,7 @@ fun AddingScreen(
             Button(modifier = Modifier.padding(4.dp).fillMaxWidth(), onClick = {
                 if(newModelParams.all { it.isNotEmpty() }){
                     viewModel.create(newModelParams.toList(),table)
+                    added = true
                 }
             }) {
                 Text(text = "Создать")

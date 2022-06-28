@@ -22,7 +22,7 @@ fun String.toRussian() : String = when(this){
     "locality" -> "Населённый пункт"
     "street" -> "Улица"
     "house" -> "Дом"
-    "building" -> "Улица"
+    "building" -> "Корпус"
     "apartment" -> "Квартира"
     "address","address_id" -> "Адрес"
 
