@@ -49,5 +49,12 @@ class AppViewModel(val tables: List<Table>) {
 
     }
 
+    fun create(newModelParams:List<String>, table: CommonTable) {
+        coroutineScope.launch {
+            table.addNew(newModelParams)
+            refresh()
+        }
+    }
+
 
 }

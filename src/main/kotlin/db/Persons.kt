@@ -7,7 +7,6 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import ui.filters.Filter
-import kotlin.reflect.KClass
 
 object Persons : IntIdTable(), CommonTable {
     val name = varchar("name", 100).uniqueIndex()
@@ -42,7 +41,25 @@ object Persons : IntIdTable(), CommonTable {
         }
     }
 
-    override fun entity(): Class<Person> = Person::class.java
+    override suspend fun addNew(list: List<String>) {
+        transaction {
+            Person.new {
+                name = list[0]
+                obj = list[1]
+                jobPosition = list[2]
+                militaryRank = list[3]
+                sex = list[4]
+                maidenName = list[5]
+                birthDay = list[6]
+                birthPlace = list[7]
+                birthCountry = list[8]
+                nationality = list[9]
+                citizen = list[10]
+                admissionForm = list[11]
+            }
+
+        }
+    }
 
 }
 
@@ -88,7 +105,7 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
         admissionForm
     )
 
-    override suspend fun listOfLinks(): List<Pair<String,List<CommonObject>>> {
+    override suspend fun listOfLinks(): List<Pair<String, List<CommonObject>>> {
         return transaction {
             listOf(Addresses.tableName.toRussian() to addresses.toList())
         }

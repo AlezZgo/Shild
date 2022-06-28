@@ -8,5 +8,6 @@ interface CommonTable  {
 
     suspend fun all(filters : List<Filter>) : List<CommonObject>
 
-    fun entity() : Class<out CommonObject>
+    suspend fun addNew(list : List<String>)
+
 }

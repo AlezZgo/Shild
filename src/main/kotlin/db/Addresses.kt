@@ -35,7 +35,21 @@ object Addresses : IntIdTable(), CommonTable {
         }
     }
 
-    override fun entity(): Class<Address> = Address::class.java
+    override suspend fun addNew(list: List<String>) {
+        transaction {
+            Address.new {
+                type = list[0]
+                ate = list[1]
+                locality = list[2]
+                street = list[3]
+                house = list[4]
+                building = list[5]
+                apartment = list[6]
+            }
+
+        }
+    }
+
 }
 
 class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {

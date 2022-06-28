@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import db.toRussian
 import extensions.screens.openWindow
+import org.jetbrains.exposed.sql.Table
 import ui.AddingScreen
 import ui.DescriptionScreen
 import ui.DescriptionViewModel
@@ -62,7 +63,7 @@ fun MainScreen(
                     Button(modifier = Modifier.weight(1f).padding(4.dp), onClick = {
 
                         openWindow("Создание нового объекта",){
-                            AddingScreen(appViewModel)
+                            AddingScreen(appViewModel,appViewModel.currentTable.value)
                         }
                     }) {
                         Image(

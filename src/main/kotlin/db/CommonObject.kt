@@ -12,7 +12,7 @@ interface CommonObject : Edit {
     fun table() : Table
 
     override suspend fun edit(newValues: List<String>)
-    suspend fun remove()
 
+    suspend fun remove()
 
 }
