@@ -1,17 +1,24 @@
 package ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import db.CommonObject
+import db.Persons
 import db.toRussian
 import extensions.screens.openWindow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -101,12 +108,21 @@ fun DescriptionScreen(
                     Column {
 
                         links.value.forEach { pairOfLinkNameAndObjects ->
+                            Row {
+                                Text(
+                                    text = pairOfLinkNameAndObjects.first,
+                                    modifier = Modifier.padding(4.dp),
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Button(modifier = Modifier.padding(4.dp).fillMaxWidth().height(30.dp),
+                                    onClick = {
 
-                            Text(
-                                text = pairOfLinkNameAndObjects.first,
-                                modifier = Modifier.fillMaxWidth().padding(4.dp),
-                                fontWeight = FontWeight.Bold
-                            )
+                                    //todo Выпадашка с адресами итд...
+                                }) {
+                                    Text("Добавить")
+                                }
+                            }
+
                             pairOfLinkNameAndObjects.second.forEach {
 
                                 TextButton(modifier = Modifier.padding(4.dp),
