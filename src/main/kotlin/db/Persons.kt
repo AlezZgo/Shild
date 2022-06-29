@@ -105,9 +105,9 @@ class Person(id: EntityID<Int>) : IntEntity(id), CommonObject {
         admissionForm
     )
 
-    override suspend fun listOfLinks(): List<Pair<String, List<CommonObject>>> {
+    override suspend fun listOfLinks(): List<Pair<CommonTable, List<CommonObject>>> {
         return transaction {
-            listOf(Addresses.tableName.toRussian() to addresses.toList())
+            listOf(Addresses to addresses.toList())
         }
     }
 

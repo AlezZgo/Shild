@@ -7,7 +7,7 @@ interface CommonObject : Edit {
 
     fun listOfValues() : List<String>
 
-    suspend fun listOfLinks():  List<Pair<String,List<CommonObject>>>
+    suspend fun listOfLinks(): List<Pair<CommonTable, List<CommonObject>>>
 
     fun table() : Table
 

@@ -1,4 +1,4 @@
-package ui
+package ui.popUpMenu
 
 import db.CommonObject
 import db.CommonTable
@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class DescriptionViewModel(model: CommonObject) {
+class PopUpMenuViewModel(table : CommonTable) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val _links = MutableStateFlow(emptyList<Pair<CommonTable,List<CommonObject>>>())
-    val links get() = _links.asStateFlow()
+    private val _linkCommons = MutableStateFlow(emptyList<CommonObject>())
+    val linkCommons get() = _linkCommons.asStateFlow()
 
     init {
         coroutineScope.launch {
-            _links.emit(
-                model.listOfLinks()
+            _linkCommons.emit(
+                table.all(emptyList())
             )
         }
     }

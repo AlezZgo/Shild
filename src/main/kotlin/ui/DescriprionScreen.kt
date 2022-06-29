@@ -22,7 +22,9 @@ import db.Persons
 import db.toRussian
 import extensions.screens.openWindow
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.jetbrains.exposed.sql.Table
 import ui.mainScreen.AppViewModel
+import ui.popUpMenu.PopUpMenu
 
 @Composable
 fun DescriptionScreen(
@@ -38,6 +40,7 @@ fun DescriptionScreen(
 
     Card(modifier = Modifier.fillMaxSize().padding(4.dp)) {
         Column {
+
             if (deleted) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Text(text = "Объект удалён из базы данных", modifier = Modifier.align(Alignment.Center))
@@ -82,8 +85,6 @@ fun DescriptionScreen(
                 }
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 
-                    var listOfLinks = MutableStateFlow(emptyList<CommonObject>())
-
                     model.table().columns.drop(1).forEachIndexed { index, column ->
 
                         var content by remember { mutableStateOf(model.listOfValues().elementAt(index)) }
@@ -107,23 +108,17 @@ fun DescriptionScreen(
                     }
                     Column {
 
-                        links.value.forEach { pairOfLinkNameAndObjects ->
-                            Row {
+                        links.value.forEach { pairTableToObjects ->
+                            Column {
                                 Text(
-                                    text = pairOfLinkNameAndObjects.first,
+                                    text = (pairTableToObjects.first as Table).tableName.toRussian(),
                                     modifier = Modifier.padding(4.dp),
                                     fontWeight = FontWeight.Bold
                                 )
-                                Button(modifier = Modifier.padding(4.dp).fillMaxWidth().height(30.dp),
-                                    onClick = {
-
-                                    //todo Выпадашка с адресами итд...
-                                }) {
-                                    Text("Добавить")
-                                }
+                                PopUpMenu(pairTableToObjects.first)
                             }
 
-                            pairOfLinkNameAndObjects.second.forEach {
+                            pairTableToObjects.second.forEach {
 
                                 TextButton(modifier = Modifier.padding(4.dp),
                                     onClick = {

@@ -75,9 +75,9 @@ class Address(id: EntityID<Int>) : IntEntity(id),CommonObject {
             building,
             apartment)
 
-    override suspend fun listOfLinks(): List<Pair<String,List<CommonObject>>> {
+    override suspend fun listOfLinks(): List<Pair<CommonTable,List<CommonObject>>> {
         return transaction {
-            listOf(Persons.tableName.toRussian() to persons.toList())
+            listOf(Persons to persons.toList())
         }
     }
 
